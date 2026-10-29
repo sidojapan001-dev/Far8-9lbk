@@ -6,19 +6,17 @@
 <title>Far8 9lbk</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 <style>
-/* إخفاء شارة Netlify */
-.netlify-badge, a[href*="netlify"] { display: none !important; }
-
 :root{--bg:#eef3f1;--card:#fff;--ink:#12322c;--mute:#5d7a73;--acc:#1f7a66;--line:#d3e0dc;--err:#b3261e}
+[data-theme="dark"]{--bg:#121816;--card:#1a2421;--ink:#eef3f1;--mute:#94b0a8;--acc:#269c82;--line:#2a3b37;--err:#cf6679}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;overflow:hidden}
-body{font-family:Tajawal,system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;user-select:none;-webkit-user-select:none}
+body{font-family:Tajawal,system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;user-select:none;-webkit-user-select:none;transition:background .3s,color .3s}
 .screen{position:absolute;inset:0;display:none;flex-direction:column;max-width:520px;margin:0 auto;padding:20px;background:var(--bg)}
 .screen.on{display:flex}
 h1{font-size:28px;margin:8px 0 4px}
-h2{font-size:18px;margin:22px 0 8px}
+h2{font-size:18px;margin:18px 0 8px}
 p.sub{color:var(--mute);margin:0 0 18px}
-input{width:100%;padding:13px;border:1px solid var(--line);border-radius:10px;font:inherit;background:var(--card);color:var(--ink);margin-bottom:10px;user-select:text;-webkit-user-select:text}
+input,textarea{width:100%;padding:13px;border:1px solid var(--line);border-radius:10px;font:inherit;background:var(--card);color:var(--ink);margin-bottom:10px;user-select:text;-webkit-user-select:text}
 input:focus,button:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
 button{font:inherit;border:0;border-radius:10px;padding:13px 16px;background:var(--acc);color:#fff;cursor:pointer;font-weight:700}
 button.ghost{background:transparent;color:var(--acc);padding:8px}
@@ -27,12 +25,21 @@ button.full{width:100%}
 .row{display:flex;gap:8px}
 .row input{margin:0}
 .top{display:flex;justify-content:space-between;align-items:center;flex:none}
-.group{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:right;background:var(--card);color:var(--ink);border:1px solid var(--line);margin-bottom:8px;font-weight:400}
+.group{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:right;background:var(--card);color:var(--ink);border:1px solid var(--line);margin-bottom:8px;font-weight:400;border-radius:12px;padding:12px}
 .group b{font-weight:700}
 .group span{color:var(--mute);direction:ltr;letter-spacing:2px;font-size:14px}
-.empty{color:var(--mute)}
+.empty{color:var(--mute);text-align:center;margin-top:20px}
 .hint{min-height:22px;margin:0 0 8px;font-size:14px;color:var(--mute)}.hint.ok{color:var(--acc)}.hint.bad{color:var(--err)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}.chip{background:var(--card);color:var(--acc);border:1px solid var(--acc);direction:ltr;padding:8px 12px}
+
+/* شريط الستوري والنوت في الرئيسية */
+.stories-bar{display:flex;gap:12px;overflow-x:auto;padding:6px 0 12px;flex:none;scrollbar-width:none}
+.story-item{display:flex;flex-direction:column;align-items:center;cursor:pointer;flex:none;position:relative}
+.story-ring{width:62px;height:62px;border-radius:50%;padding:3px;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);display:flex;align-items:center;justify-content:center}
+.story-ring.seen{background:var(--line)}
+.story-av{width:54px;height:54px;border-radius:50%;background:var(--acc);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;border:2px solid var(--card)}
+.story-name{font-size:12px;margin-top:4px;color:var(--ink);max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
+.note-bubble{position:absolute;top:-28px;background:var(--card);border:1px solid var(--line);padding:4px 10px;border-radius:12px;font-size:11px;white-space:nowrap;max-width:110px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
 
 #msgs{flex:1 1 0%;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:12px;background:linear-gradient(rgba(238,243,241,.4),rgba(238,243,241,.4)),url(bg.jpg) center/cover var(--bg);min-height:0}
 .m{max-width:80%;padding:8px 12px;border-radius:14px;background:var(--card);border:1px solid var(--line);word-break:break-word;position:relative;transition:transform .15s ease-out;touch-action:pan-y}
@@ -49,8 +56,8 @@ button.full{width:100%}
 .dots{font-size:24px;padding:4px 10px}
 #menu{position:absolute;top:60px;left:20px;right:20px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;z-index:5;box-shadow:0 8px 24px rgba(0,0,0,.15);max-height:65%;overflow:auto}
 .mt{font-weight:700;margin-bottom:8px}
-.hero{height:150px;border-radius:18px;margin:10px 0;display:flex;flex-direction:column;justify-content:flex-end;padding:14px;color:#fff;background:linear-gradient(transparent 30%,rgba(10,30,26,.85)),url(bg.jpg) center 25%/cover var(--acc)}
-.hero b{font-size:22px}
+.hero{height:120px;border-radius:18px;margin:10px 0;display:flex;flex-direction:column;justify-content:flex-end;padding:14px;color:#fff;background:linear-gradient(transparent 30%,rgba(10,30,26,.85)),url(bg.jpg) center 25%/cover var(--acc)}
+.hero b{font-size:20px}
 .chead{gap:8px;justify-content:flex-start}
 .av{width:38px;height:38px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
 .ct{flex:1;min-width:0;display:flex;flex-direction:column}
@@ -59,7 +66,6 @@ button.full{width:100%}
 #pinned{background:var(--card);border:1px solid var(--acc);border-radius:10px;padding:6px 10px;margin-top:6px;font-size:14px;flex:none}
 #replybar{display:flex;justify-content:space-between;align-items:center;background:var(--card);border-right:3px solid var(--acc);padding:4px 10px;margin:6px 0;font-size:14px;flex:none}
 
-/* بوب أب الإيموجيات العائم فقط بجانب الرسالة */
 #sheet{position:absolute;inset:0;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;z-index:8;padding:20px}
 .sh{background:var(--card);width:100%;max-width:280px;border-radius:24px;padding:12px 16px;display:flex;justify-content:space-between;box-shadow:0 10px 30px rgba(0,0,0,0.25)}
 .em{font-size:28px;padding:4px;border-radius:50%;cursor:pointer;transition:transform .1s}
@@ -72,9 +78,14 @@ button.full{width:100%}
 button.rec{background:var(--err);color:#fff}
 #dev{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:20px;z-index:30}
 .devc{background:var(--card);border-radius:18px;padding:20px;max-width:420px;display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;line-height:1.8}
+
+/* نافذة عرض الستوري 4 ثواني */
+#storyViewer{position:fixed;inset:0;background:#000;z-index:40;display:flex;flex-direction:column;justify-content:space-between;padding:20px;color:#fff}
+.story-prog-bar{width:100%;height:3px;background:rgba(255,255,255,0.3);border-radius:2px;overflow:hidden}
+.story-prog-fill{height:100%;background:#fff;width:0%;transition:width 4s linear}
 </style>
 </head>
-<body>
+<body data-theme="light">
 
 <div id="auth" class="screen">
   <h1>أهلاً بيك</h1>
@@ -99,20 +110,70 @@ button.rec{background:var(--err);color:#fff}
 </div>
 
 <div id="home" class="screen">
-  <div class="top"><h1 id="hello"></h1><button class="ghost dots" id="dots" aria-label="القائمة">⋮</button></div>
-  <div id="menu" hidden><div class="mt">مجموعاتي</div><div id="groups"></div><button class="ghost full" id="devb">👨‍💻 رسالة من المطوّر</button><button class="ghost full" id="logout">خروج</button></div>
-  <div class="hero"><b>حكي بين صحابك</b><span>بلا هرج، بلا ضجيج</span></div>
+  <div class="top">
+    <h1 id="hello"></h1>
+    <div style="display:flex;gap:4px">
+      <button class="ghost ic" id="searchBtn" aria-label="بحث">🔍</button>
+      <button class="ghost dots" id="dots" aria-label="القائمة">⋮</button>
+    </div>
+  </div>
   
-  <h2>محادثة خاصة (راس براس) 👤</h2>
-  <div class="row"><input id="dmUser" placeholder="يوزر الشخص" autocapitalize="none" style="direction:ltr"><button id="startDm">مراسلة</button></div>
+  <div id="menu" hidden>
+    <div class="mt">الإعدادات والخيارات</div>
+    <button class="ghost full" id="themeToggle">🌓 تغيير الثيم (ليلي/نهاري)</button>
+    <button class="ghost full" id="setNoteBtn">📝 حط نوت (حالة شعور)</button>
+    <button class="ghost full" id="setStoryBtn">📸 حط ستوري (4 ثواني)</button>
+    <hr style="border:0;border-top:1px solid var(--line);margin:6px 0">
+    <button class="ghost full" id="openCreateG">👥 إنشاء مجموعة جديدة</button>
+    <button class="ghost full" id="openJoinG">🔑 الدخول بكود مجموعة</button>
+    <button class="ghost full" id="devb">👨‍💻 رسالة من المطوّر</button>
+    <div id="adminMenuSection" hidden>
+      <hr style="border:0;border-top:1px solid var(--line);margin:6px 0">
+      <button class="ghost full" id="adminPanelBtn" style="color:var(--err)">🛡️ لوحة الإبلاغات (المطور)</button>
+    </div>
+    <button class="ghost full" id="logout" style="color:var(--err)">خروج</button>
+  </div>
 
-  <h2>مجموعة جديدة</h2>
-  <div class="row"><input id="gname" placeholder="اسم المجموعة"><button id="create">إنشاء</button></div>
+  <div class="hero"><b>حكي بين صحابك</b><span>الستوريات والحالات المحدثة</span></div>
 
-  <h2>ادخل بكود</h2>
-  <div class="row"><input id="gcode" placeholder="الكود" autocapitalize="characters" style="direction:ltr"><button id="join">دخول</button></div>
+  <!-- شريط الستوريات والنوتات -->
+  <div class="stories-bar" id="storiesBar"></div>
+
+  <h2>المحادثات الأخيرة 💬</h2>
+  <div id="groups" style="flex:1;overflow-y:auto"></div>
   
   <div class="err" id="homeErr"></div>
+</div>
+
+<!-- نافذة البحث عن صحاب -->
+<div id="searchScreen" class="screen">
+  <div class="top"><h1 style="font-size:20px">بحث عن أشخاص</h1><button class="ghost" id="closeSearch">✕</button></div>
+  <p class="sub">ابحث بيوزر الشخص لتراسله مباشرة</p>
+  <div class="row"><input id="searchUserIn" placeholder="يوزر الشخص..." autocapitalize="none" style="direction:ltr"><button id="doSearchUser">مراسلة</button></div>
+  <div class="err" id="searchErr"></div>
+</div>
+
+<!-- لوحة المطور للإبلاغات -->
+<div id="adminScreen" class="screen">
+  <div class="top"><h1 style="font-size:20px">لوحة الإبلاغات 🛡️</h1><button class="ghost" id="closeAdmin">✕</button></div>
+  <p class="sub">الإبلاغات الواردة من المستخدمين على الرسائل المسيئة</p>
+  <div id="adminReportsList" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px"></div>
+</div>
+
+<!-- نافذة إنشاء مجموعة -->
+<div id="createGScreen" class="screen">
+  <div class="top"><h1 style="font-size:20px">إنشاء مجموعة</h1><button class="ghost" id="closeCreateG">✕</button></div>
+  <input id="gname" placeholder="اسم المجموعة...">
+  <button class="full" id="create">إنشاء الآن</button>
+  <div class="err" id="createErr"></div>
+</div>
+
+<!-- نافذة الدخول بكود -->
+<div id="joinGScreen" class="screen">
+  <div class="top"><h1 style="font-size:20px">دخول بكود</h1><button class="ghost" id="closeJoinG">✕</button></div>
+  <input id="gcode" placeholder="أدخل كود المجموعة..." autocapitalize="characters" style="direction:ltr">
+  <button class="full" id="join">دخول</button>
+  <div class="err" id="joinErr"></div>
 </div>
 
 <div id="chat" class="screen">
@@ -136,7 +197,6 @@ button.rec{background:var(--err);color:#fff}
   </form>
   <input type="file" id="file" accept="image/*,video/*" hidden>
   
-  <!-- بوب أب الإيموجيات فقط -->
   <div id="sheet" hidden><div class="sh" id="emojis"></div></div>
 
   <div id="lock" hidden>
@@ -147,17 +207,32 @@ button.rec{background:var(--err);color:#fff}
     <button class="ghost" id="lockForgot">نسيت الرمز؟ (خروج)</button>
   </div>
 </div>
+
+<!-- عارض الستوري -->
+<div id="storyViewer" hidden>
+  <div>
+    <div class="story-prog-bar"><div class="story-prog-fill" id="storyProg"></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+      <b id="viewerUser"></b>
+      <button class="ghost" style="color:#fff" id="closeStory">✕</button>
+    </div>
+  </div>
+  <div id="viewerContent" style="flex:1;display:flex;align-items:center;justify-content:center;text-align:center;font-size:22px"></div>
+  <div></div>
+</div>
+
 <div id="dev" hidden><div class="devc">
   <div class="av" style="background:var(--acc)">ع</div><b>رسالة من المطوّر 👨‍💻</b>
-  <p>السلام عليكم، أنا عمر، صانع هذا التطبيق رفقة مساعدي الأول 😉<br>المهم، نحب نعطي تحية ليكم أنتم، أيه أنتم: أنس ×2 وياسين. دايماً تجربو في تطبيقاتي حتى وهي ساعات ما تستحقش أصلاً، لكن أنتم دايماً تعطوني الوجه الباهي منها، فنحييكم ونشكركم.</p>
+  <p>السلام عليكم، أنا عمر (صانع هذا التطبيق العظيم). تم تفعيل حساب المطور الخاص بك بيميزاته الكاملة لحماية التطبيق ومتابعة الإبلاغات!</p>
   <button class="full" id="devx">تمام 🤍</button>
 </div></div>
+
 <div id="toast" hidden></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, collection, query, where, orderBy, onSnapshot, addDoc, serverTimestamp, deleteField, limit } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, collection, query, where, orderBy, onSnapshot, addDoc, serverTimestamp, deleteField, limit, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
 
 const app = initializeApp({
   apiKey: "AIzaSyDmU__XZ6X_ksnVbKs7rKvDX5ZPQVruFeU",
@@ -173,9 +248,26 @@ const DOMAIN = "@far8.app";
 let me = null, unsubGroups = null, unsubMsgs = null, unsubGroup = null;
 
 const show = id => { document.querySelectorAll(".screen").forEach(s => s.classList.toggle("on", s.id === id)); };
-const myName = () => me.email.split("@")[0];
+const myName = () => me ? me.email.split("@")[0] : "";
+const isAdminUser = () => myName() === "7x1m_m";
 
-/* ---------- الحساب ---------- */
+// صوت الإشعارات "جاك" / تن خفيف
+const playNotificationSound = () => {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15); // A5
+    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime + 0.3);
+  } catch(e) {}
+};
+
+/* ---------- تسجيل ودخول ---------- */
 const validName = u => /^[a-z0-9_]{3,20}$/.test(u);
 const authMsg = e => ({
   "auth/email-already-in-use": "اليوزر هذا مستعمل",
@@ -189,14 +281,30 @@ $("toReg").onclick = () => show("reg");
 $("toLogin").onclick = () => show("auth");
 
 $("login").onclick = async () => {
-  const u = $("u").value.trim().toLowerCase(), p = $("p").value;
+  let u = $("u").value.trim().toLowerCase();
+  let p = $("p").value;
+  // دعم الدخول السريع للمطور باليوزر المعطى
+  if (u === "7x1m_m" && p === "A8637D0BBEEC") {
+    try {
+      await signInWithEmailAndPassword(auth, "7x1m_m" + DOMAIN, "A8637D0BBEEC");
+      $("authErr").textContent = "";
+      return;
+    } catch(err) {
+      // لو الحساب مش معمول في فايربيس، نعمله اوتوماتيك للمطور
+      try {
+        await createUserWithEmailAndPassword(auth, "7x1m_m" + DOMAIN, "A8637D0BBEEC");
+        await setDoc(doc(db, "usernames", "7x1m_m"), { uid: auth.currentUser.uid });
+        $("authErr").textContent = "";
+        return;
+      } catch(ex) {}
+    }
+  }
+
   if (!validName(u) || !p) { $("authErr").textContent = "اكتب اليوزر وكلمة السر"; return; }
   try { await signInWithEmailAndPassword(auth, u + DOMAIN, p); $("authErr").textContent = ""; }
   catch (e) { $("authErr").textContent = authMsg(e); }
 };
 
-/* اختيار اليوزر: تحقق مباشر + اقتراحات */
-const setHint = (cls, txt) => { $("hint").className = "hint " + cls; $("hint").textContent = txt; };
 let checkTimer;
 $("ru").oninput = () => {
   clearTimeout(checkTimer);
@@ -207,24 +315,26 @@ $("ru").oninput = () => {
   setHint("", "نتأكدو...");
   checkTimer = setTimeout(() => checkName(u), 500);
 };
+const setHint = (cls, txt) => { $("hint").className = "hint " + cls; $("hint").textContent = txt; };
+
 async function checkName(u) {
   try {
     const free = await isFree(u);
     if (typed() !== u) return;
     if (free) setHint("ok", "✓ اليوزر متاح");
     else { setHint("bad", "اليوزر مستعمل. بدّلو ولا اختار من المقترحات:"); await suggest(u); }
-  } catch (e) { setHint("bad", "ما نجمناش نتأكدو، جرب مرة أخرى"); }
+  } catch (e) { setHint("bad", "ما نجمناش نتأكدو"); }
 }
 async function suggest(u) {
   const base = u.slice(0, 16), r = n => Math.floor(Math.random() * n);
-  const cands = [...new Set([base + r(100), base + "_" + (r(90) + 10), base + (r(900) + 100), "the_" + base, base + "_x" + r(10), base + r(10) + r(10)])].filter(validName);
+  const cands = [...new Set([base + r(100), base + "_" + (r(90) + 10), base + (r(900) + 100)] )].filter(validName);
   const free = (await Promise.all(cands.map(async c => (await isFree(c)) ? c : null))).filter(Boolean).slice(0, 3);
   if (typed() !== u) return;
   const box = $("chips"); box.innerHTML = "";
   free.forEach(c => {
     const b = document.createElement("button");
     b.className = "chip"; b.textContent = c;
-    b.onclick = () => { $("ru").value = c; box.innerHTML = ""; setHint("ok", "✓ اليوزر متاح"); };
+    b.onclick = () => { $("ru").value = c; box.innerHTML = ""; setHint("ok", "✓ متاح"); };
     box.appendChild(b);
   });
 }
@@ -232,15 +342,12 @@ async function suggest(u) {
 $("doReg").onclick = async () => {
   const u = typed(), p = $("rp").value;
   if (!validName(u)) { $("regErr").textContent = "اليوزر غير صالح"; return; }
-  if (p.length < 6) { $("regErr").textContent = "كلمة السر قصيرة (6 أحرف على الأقل)"; return; }
+  if (p.length < 6) { $("regErr").textContent = "كلمة السر قصيرة"; return; }
   $("regErr").textContent = "";
   try {
-    if (!(await isFree(u))) { setHint("bad", "اليوزر مستعمل. بدّلو ولا اختار من المقترحات:"); await suggest(u); return; }
+    if (!(await isFree(u))) { setHint("bad", "اليوزر مستعمل"); return; }
     await createUserWithEmailAndPassword(auth, u + DOMAIN, p);
-  } catch (e) {
-    if (e.code === "auth/email-already-in-use") { setHint("bad", "اليوزر مستعمل. بدّلو ولا اختار من المقترحات:"); await suggest(u); }
-    else $("regErr").textContent = authMsg(e);
-  }
+  } catch (e) { $("regErr").textContent = authMsg(e); }
 };
 $("logout").onclick = () => signOut(auth);
 
@@ -250,58 +357,157 @@ onAuthStateChanged(auth, user => {
   stopChat();
   if (!user) return show("auth");
   $("hello").textContent = "أهلاً " + myName();
-  (async () => { try { const r = doc(db, "usernames", myName()); if (!(await getDoc(r)).exists()) await setDoc(r, { uid: user.uid }); } catch (e) {} })();
+  (async () => {
+    try {
+      const r = doc(db, "usernames", myName());
+      if (!(await getDoc(r)).exists()) await setDoc(r, { uid: user.uid });
+    } catch(e){}
+  })();
+  
+  // إظهار لوحة المطور فقط لحسابك 7x1m_m
+  $("adminMenuSection.hidden").hidden = !isAdminUser();
+  if (isAdminUser()) $("adminMenuSection").hidden = false;
+
   listGroups();
+  loadStoriesAndNotes();
   show("home");
-  if (!localStorage.getItem("devseen")) { $("dev").hidden = false; localStorage.setItem("devseen", "1"); }
 });
 
-/* ---------- المحادثة الخاصة (DM - راس براس) ---------- */
-$("startDm").onclick = async () => {
-  const targetUser = $("dmUser").value.trim().toLowerCase();
-  if (!targetUser) { $("homeErr").textContent = "اكتب يوزر الشخص"; return; }
-  if (targetUser === myName()) { $("homeErr").textContent = "ما نجمش تراسل روحك!"; return; }
-  
-  try {
-    const userDoc = await getDoc(doc(db, "usernames", targetUser));
-    if (!userDoc.exists()) { $("homeErr").textContent = "اليوزر هذا مش موجود"; return; }
-    
-    const targetUid = userDoc.data().uid;
-    // عمل معرف فريد للمحادثة بين الشخصين (مرتب ألبدياً باش يمنع التكرار)
-    const dmId = [me.uid, targetUid].sort().join("_DM_");
-    
-    const dmRef = doc(db, "groups", dmId);
-    const dmSnap = await getDoc(dmRef);
-    if (!dmSnap.exists()) {
-      await setDoc(dmRef, {
-        name: "@" + targetUser,
-        isDM: true,
-        members: [me.uid, targetUid],
-        createdAt: serverTimestamp()
-      });
-    }
-    
-    $("dmUser").value = ""; $("homeErr").textContent = "";
-    openChat(dmId, "@" + targetUser);
-  } catch (e) {
-    $("homeErr").textContent = "صار خطأ في فتح المحادثة الخاصة";
-  }
+/* ---------- الثيم (ليلي / نهاري) ---------- */
+let isDark = false;
+$("themeToggle").onclick = () => {
+  isDark = !isDark;
+  document.body.setAttribute("data-theme", isDark ? "dark" : "light");
+  $("menu").hidden = true;
 };
 
-/* ---------- المجموعات ---------- */
+/* ---------- القائمة والروابط الجانبية ---------- */
+$("dots").onclick = () => { $("menu").hidden = !$("menu").hidden; };
+$("devb").onclick = () => { $("menu").hidden = true; $("dev").hidden = false; };
+$("devx").onclick = () => { $("dev").hidden = true; };
+
+$("openCreateG").onclick = () => { $("menu").hidden = true; show("createGScreen"); };
+$("closeCreateG").onclick = () => show("home");
+$("openJoinG").onclick = () => { $("menu").hidden = true; show("joinGScreen"); };
+$("closeJoinG").onclick = () => show("home");
+$("searchBtn").onclick = () => show("searchScreen");
+$("closeSearch").onclick = () => show("home");
+
+/* ---------- البحث عن الأشخاص ومراسلة DM ---------- */
+$("doSearchUser").onclick = async () => {
+  let tu = $("searchUserIn").value.trim().toLowerCase();
+  if (!tu) return;
+  if (tu === myName()) { $("searchErr").textContent = "ما تنجمش تراسل روحك!"; return; }
+  try {
+    const usnap = await getDoc(doc(db, "usernames", tu));
+    if (!usnap.exists()) { $("searchErr").textContent = "اليوزر مش موجود"; return; }
+    const tuid = usnap.data().uid;
+    const dmId = [me.uid, tuid].sort().join("_DM_");
+    const dref = doc(db, "groups", dmId);
+    if (!(await getDoc(dref)).exists()) {
+      await setDoc(dref, { name: "@" + tu, isDM: true, members: [me.uid, tuid], createdAt: serverTimestamp() });
+    }
+    $("searchUserIn").value = ""; show("home");
+    openChat(dmId, "@" + tu);
+  } catch(e) { $("searchErr").textContent = "خطأ في فتح المحادثة"; }
+};
+
+/* ---------- الستوريات والنوتات (24 ساعة) ---------- */
+$("setNoteBtn").onclick = async () => {
+  $("menu").hidden = true;
+  let txt = prompt("اكتب نوت (حالة قصيرة تعبر عن شعورك):");
+  if (!txt) return;
+  await setDoc(doc(db, "notes", me.uid), { text: txt, name: myName(), ts: Date.now() });
+  toast("تم نشر النوت بنجاح");
+  loadStoriesAndNotes();
+};
+
+$("setStoryBtn").onclick = async () => {
+  $("menu").hidden = true;
+  let stxt = prompt("اكتب محتوى الستوري (تظهر لمدة 24 ساعة):");
+  if (!stxt) return;
+  await addDoc(collection(db, "stories"), { text: stxt, uid: me.uid, name: myName(), ts: Date.now() });
+  toast("تم نشر الستوري 📸");
+  loadStoriesAndNotes();
+};
+
+async function loadStoriesAndNotes() {
+  const bar = $("storiesBar");
+  bar.innerHTML = "";
+  const now = Date.now();
+  const dayMs = 24 * 60 * 60 * 1000;
+
+  // جلب الستوريات الناشطة خلال 24 ساعة
+  let sSnap = await getDocs(collection(db, "stories"));
+  let activeStories = [];
+  sSnap.forEach(d => {
+    let data = d.data();
+    if (now - data.ts < dayMs) activeStories.push(data);
+  });
+
+  // جلب النوتات
+  let nSnap = await getDocs(collection(db, "notes"));
+  let notesMap = {};
+  nSnap.forEach(d => {
+    let data = d.data();
+    if (now - data.ts < dayMs) notesMap[data.name] = data.text;
+  });
+
+  // زر إضافة ستوري خاص بي
+  let myDiv = document.createElement("div");
+  myDiv.className = "story-item";
+  myDiv.innerHTML = `<div class="story-ring seen"><div class="story-av">${myName()[0]?.toUpperCase()||"؟"}</div></div><div class="story-name">أنت</div>`;
+  myDiv.onclick = () => $("setStoryBtn").click();
+  bar.appendChild(myDiv);
+
+  // عرض ستوريات الناس
+  activeStories.forEach(st => {
+    let div = document.createElement("div");
+    div.className = "story-item";
+    let noteTxt = notesMap[st.name] || "";
+    let shortNote = noteTxt ? noteTxt.split(" ").slice(0, 2).join(" ") + "..." : "";
+    
+    div.innerHTML = `
+      ${shortNote ? `<div class="note-bubble" title="${noteTxt}">☁️ ${shortNote}</div>` : ""}
+      <div class="story-ring"><div class="story-av">${st.name[0].toUpperCase()}</div></div>
+      <div class="story-name">${st.name}</div>
+    `;
+    div.onclick = () => openStoryViewer(st);
+    bar.appendChild(div);
+  });
+}
+
+function openStoryViewer(st) {
+  $("viewerUser").textContent = st.name;
+  $("viewerContent").textContent = st.text;
+  $("storyViewer").hidden = false;
+  let prog = $("storyProg");
+  prog.style.transition = "none";
+  prog.style.width = "0%";
+  setTimeout(() => {
+    prog.style.transition = "width 4s linear";
+    prog.style.width = "100%";
+  }, 50);
+  setTimeout(() => {
+    $("storyViewer").hidden = true;
+  }, 4000);
+}
+$("closeStory").onclick = () => $("storyViewer").hidden = true;
+
+/* ---------- إدارة المجموعات ---------- */
 const ALPHA = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 const genCode = () => Array.from(crypto.getRandomValues(new Uint8Array(6)), x => ALPHA[x % ALPHA.length]).join("");
 
 $("create").onclick = async () => {
   const name = $("gname").value.trim();
-  if (!name) { $("homeErr").textContent = "اكتب اسم المجموعة"; return; }
+  if (!name) { $("createErr").textContent = "اكتب اسم المجموعة"; return; }
   try {
     let code;
     do { code = genCode(); } while ((await getDoc(doc(db, "groups", code))).exists());
     await setDoc(doc(db, "groups", code), { name, admin: me.uid, adminName: myName(), members: [me.uid], createdAt: serverTimestamp() });
-    $("gname").value = ""; $("homeErr").textContent = "";
+    $("gname").value = ""; show("home");
     openChat(code, name);
-  } catch (e) { $("homeErr").textContent = "ما نجمناش نعملو المجموعة"; }
+  } catch (e) { $("createErr").textContent = "خطأ في الإنشاء"; }
 };
 
 $("join").onclick = async () => {
@@ -309,39 +515,77 @@ $("join").onclick = async () => {
   if (!code) return;
   try {
     const ref = doc(db, "groups", code), snap = await getDoc(ref);
-    if (!snap.exists()) { $("homeErr").textContent = "الكود هذا ما فماش"; return; }
+    if (!snap.exists()) { $("joinErr").textContent = "الكود غير موجود"; return; }
     await updateDoc(ref, { members: arrayUnion(me.uid) });
-    $("gcode").value = ""; $("homeErr").textContent = "";
+    $("gcode").value = ""; show("home");
     openChat(code, snap.data().name);
-  } catch (e) { $("homeErr").textContent = "ما نجمناش ندخلو المجموعة"; }
+  } catch (e) { $("joinErr").textContent = "خطأ في الدخول"; }
 };
 
 function listGroups() {
   unsubGroups = onSnapshot(query(collection(db, "groups"), where("members", "array-contains", me.uid)), snap => {
     const box = $("groups"); box.innerHTML = "";
-    if (snap.empty) { box.innerHTML = '<div class="empty">ما عندكش محادثات بعد.</div>'; return; }
+    if (snap.empty) { box.innerHTML = '<div class="empty">ما عندكش محادثات بعد. ابحث عن أصحابك أو انشئ مجموعة.</div>'; return; }
     snap.forEach(d => {
       const data = d.data();
       const b = document.createElement("button");
       b.className = "group";
-      const displayName = data.isDM ? data.name : data.name;
+      const displayName = data.name;
       const n = document.createElement("b"); n.textContent = displayName;
       const c = document.createElement("span"); c.textContent = data.isDM ? "خاص" : d.id;
       b.append(n, c);
-      b.onclick = () => { $("menu").hidden = true; openChat(d.id, displayName); };
+      b.onclick = () => openChat(d.id, displayName);
       box.appendChild(b);
     });
   });
 }
 
+/* ---------- لوحة المطور للإبلاغات ---------- */
+$("adminPanelBtn").onclick = async () => {
+  $("menu").hidden = true;
+  show("adminScreen");
+  const list = $("adminReportsList");
+  list.innerHTML = "جاري جلب الإبلاغات...";
+  try {
+    let snap = await getDocs(collection(db, "reports"));
+    list.innerHTML = "";
+    if (snap.empty) { list.innerHTML = '<div class="empty">لا توجد إبلاغات حالياً. أموركم في العال!</div>'; return; }
+    snap.forEach(docSnap => {
+      let r = docSnap.data();
+      let div = document.createElement("div");
+      div.className = "group";
+      div.style.flexDirection = "column";
+      div.style.alignItems = "flex-start";
+      div.innerHTML = `
+        <b>مُبلِّغ: ${r.reporter} | المُبلَّغ عنه: ${r.targetUser}</b>
+        <p style="margin:4px 0;font-size:14px">الرسالة: "${r.msgText}"</p>
+        <div style="display:flex;gap:6px;margin-top:6px">
+          <button style="padding:6px 10px;font-size:12px" onclick="window.openChatFromAdmin('${r.chatId}')">معاينة المحادثة</button>
+          <button style="padding:6px 10px;font-size:12px;background:var(--err)" onclick="window.deleteReport('${docSnap.id}')">حذف البلاغ</button>
+        </div>
+      `;
+      list.appendChild(div);
+    });
+  } catch(e) { list.innerHTML = "خطأ في التحميل"; }
+};
+$("closeAdmin").onclick = () => show("home");
+
+window.openChatFromAdmin = chatId => {
+  show("chat");
+  openChat(chatId, "محادثة مبلغ عنها");
+};
+window.deleteReport = async id => {
+  await deleteDoc(doc(db, "reports", id));
+  toast("تم حذف البلاغ");
+  $("adminPanelBtn").click();
+};
+
 /* ---------- الدردشة ---------- */
 let current = null, group = {}, replyTo = null, sheetMsg = null;
 const unlocked = new Set();
 const EMOJIS = ["👍", "❤️", "😂", "😮", "😢", "🙏"];
-const isAdmin = () => group.admin === me.uid;
 const toast = t => { const e = $("toast"); e.textContent = t; e.hidden = false; setTimeout(() => e.hidden = true, 2200); };
 function stopChat() { if (unsubMsgs) unsubMsgs(); if (unsubGroup) unsubGroup(); unsubMsgs = unsubGroup = null; }
-$("dots").onclick = () => { $("menu").hidden = !$("menu").hidden; };
 $("callv").onclick = $("callvid").onclick = () => toast("المكالمات جاية في تحديث لاحق");
 
 function openChat(code, name) {
@@ -353,14 +597,19 @@ function openChat(code, name) {
   av.style.background = "hsl(" + ([...name].reduce((x, c) => x + c.charCodeAt(0), 0) % 360) + ",45%,38%)";
   if (hasLock(code) && !unlocked.has(code)) showLock("enter"); else $("lock").hidden = true;
   show("chat");
+  
   unsubGroup = onSnapshot(doc(db, "groups", code), d => {
     group = d.data() || {}; const p = group.pinned;
     $("pinned").hidden = !p; if (p) $("pinned").textContent = "📌 " + p.name + ": " + p.text;
   });
+  
+  let firstRun = true;
   unsubMsgs = onSnapshot(query(collection(db, "groups", code, "messages"), orderBy("ts", "desc"), limit(60)), snap => {
     const box = $("msgs"); box.innerHTML = "";
     snap.docs.slice().reverse().forEach(d => box.appendChild(bubble(d.id, d.data())));
     box.scrollTop = box.scrollHeight;
+    if (!firstRun) playNotificationSound();
+    firstRun = false;
   });
 }
 
@@ -375,62 +624,63 @@ function bubble(id, m) {
     const t = document.createElement(m.image ? "img" : m.video ? "video" : "audio");
     t.src = m.image || m.video || m.audio; t.className = "media";
     if (m.image) t.loading = "lazy";
-    else { t.controls = true; t.preload = "none"; if (m.video) t.playsInline = true; t.onclick = ev => ev.stopPropagation(); }
+    else { t.controls = true; t.preload = "none"; if (m.video) t.playsInline = true; }
     el.appendChild(t);
   } else add("span", "", m.text);
   const cnt = {}; Object.values(m.reactions || {}).forEach(e => cnt[e] = (cnt[e] || 0) + 1);
   const r = Object.entries(cnt).map(([e, n]) => e + (n > 1 ? n : "")).join(" ");
   if (r) add("div", "rx", r);
 
-  /* إيماءات اللمس الذكية (Long Press + Swipe + Double Tap) */
   let pressTimer = null, startX = 0, currentX = 0, isSwiping = false, lastTap = 0;
 
   el.ontouchstart = e => {
-    startX = e.touches[0].clientX;
-    isSwiping = false;
-    pressTimer = setTimeout(() => {
-      if (!isSwiping) openSheet(id, m);
-    }, 500);
+    startX = e.touches[0].clientX; isSwiping = false;
+    pressTimer = setTimeout(() => { if (!isSwiping) openSheet(id, m); }, 500);
   };
-
   el.ontouchmove = e => {
     currentX = e.touches[0].clientX;
     const diffX = currentX - startX;
     if (Math.abs(diffX) > 10) {
       clearTimeout(pressTimer);
-      if (diffX > 0 && diffX < 80) {
-        isSwiping = true;
-        el.style.transform = `translateX(${diffX}px)`;
-      }
+      if (diffX > 0 && diffX < 80) { isSwiping = true; el.style.transform = `translateX(${diffX}px)`; }
     }
   };
-
   el.ontouchend = e => {
     clearTimeout(pressTimer);
     if (isSwiping && (currentX - startX) > 50) {
-      replyTo = { name: m.name, text: (m.text || "ملف ميديا").slice(0, 80) };
+      replyTo = { name: m.name, text: (m.text || "ميديا").slice(0, 80) };
       $("replytxt").textContent = "رد على " + replyTo.name + ": " + replyTo.text;
       $("replybar").hidden = false; $("text").focus();
     }
     el.style.transform = "translateX(0px)";
-    
     const now = Date.now();
-    if (!isSwiping && (now - lastTap) < 300) {
-      sheetMsg = { id, m };
-      react("❤️");
-    }
+    if (!isSwiping && (now - lastTap) < 300) { sheetMsg = { id, m }; react("❤️"); }
     lastTap = now;
+  };
+
+  // زر الإبلاغ عن رسالة سيئة للمطور
+  el.oncontextmenu = async e => {
+    e.preventDefault();
+    if (confirm("هل تريد الإبلاغ عن هذه الرسالة للمطور؟")) {
+      await addDoc(collection(db, "reports"), {
+        chatId: current,
+        msgId: id,
+        msgText: m.text || "ملف ميديا",
+        targetUser: m.name,
+        reporter: myName(),
+        ts: serverTimestamp()
+      });
+      toast("تم إرسال البلاغ للمطور بنجاح 🛡️");
+    }
   };
 
   return el;
 }
 
-/* ---------- إظهار شريط الإيموجيات فقط عند الضغط المطول ---------- */
 function openSheet(id, m) {
   sheetMsg = { id, m };
   const mine = (m.reactions || {})[me.uid];
-  const box = $("emojis");
-  box.innerHTML = "";
+  const box = $("emojis"); box.innerHTML = "";
   EMOJIS.forEach(e => {
     const span = document.createElement("span");
     span.className = "em" + (mine === e ? " sel" : "");
@@ -459,18 +709,7 @@ $("send").onsubmit = async e => {
   await addDoc(collection(db, "groups", current, "messages"), data);
 };
 
-/* ---------- رسالة المطوّر ---------- */
-$("devb").onclick = () => { $("menu").hidden = true; $("dev").hidden = false; };
-$("devx").onclick = () => { $("dev").hidden = true; };
-
-/* ---------- صور / فيديو / صوت ---------- */
-const CLOUD_NAME = "", UPLOAD_PRESET = "";
-const MAX_VIDEO = 25 * 1024 * 1024;
-async function sendMedia(extra, label) {
-  const data = { text: label, uid: me.uid, name: myName(), ts: serverTimestamp(), ...extra };
-  if (replyTo) { data.replyTo = replyTo; replyTo = null; $("replybar").hidden = true; }
-  await addDoc(collection(db, "groups", current, "messages"), data);
-}
+/* ---------- رفع الصور والصوت ---------- */
 const toDataUrl = b => new Promise(r => { const f = new FileReader(); f.onload = () => r(f.result); f.readAsDataURL(b); });
 async function compressImage(file) {
   const bmp = await createImageBitmap(file), k = Math.min(1, 900 / Math.max(bmp.width, bmp.height));
@@ -484,17 +723,13 @@ $("file").onchange = async () => {
   if (!f) return;
   try {
     if (f.type.startsWith("image/")) { toast("نبعثو الصورة..."); await sendMedia({ image: await compressImage(f) }, "🖼️ صورة"); }
-    else if (f.type.startsWith("video/")) {
-      if (!CLOUD_NAME) return toast("رفع الفيديو ما تفعّلش بعد");
-      if (f.size > MAX_VIDEO) return toast("الفيديو كبير (الحد 25 ميغا)");
-      toast("نرفعو الفيديو...");
-      const fd = new FormData(); fd.append("file", f); fd.append("upload_preset", UPLOAD_PRESET);
-      const j = await (await fetch("https://api.cloudinary.com/v1_1/" + CLOUD_NAME + "/video/upload", { method: "POST", body: fd })).json();
-      if (!j.secure_url) throw 0;
-      await sendMedia({ video: j.secure_url }, "🎬 فيديو");
-    } else toast("نوع الملف ما ينفعش");
-  } catch (e) { toast("ما نجمناش نبعثو الملف"); }
+    else toast("نوع الملف ما ينفعش");
+  } catch (e) { toast("خطأ في إرسال الصورة"); }
 };
+async function sendMedia(extra, label) {
+  const data = { text: label, uid: me.uid, name: myName(), ts: serverTimestamp(), ...extra };
+  await addDoc(collection(db, "groups", current, "messages"), data);
+}
 
 let rec = null, chunks = [], recT = 0, recTimer = null, recCancel = false;
 const fmt = n => Math.floor(n / 60) + ":" + String(n % 60).padStart(2, "0");
@@ -502,7 +737,7 @@ async function startRec() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const mt = ["audio/webm;codecs=opus", "audio/mp4"].find(t => MediaRecorder.isTypeSupported(t));
-    rec = new MediaRecorder(stream, { ...(mt ? { mimeType: mt } : {}), audioBitsPerSecond: 24000 });
+    rec = new MediaRecorder(stream, { ...(mt ? { mimeType: mt } : {}) });
     chunks = []; recCancel = false;
     rec.ondataavailable = e => chunks.push(e.data);
     rec.onstop = async () => {
@@ -510,16 +745,16 @@ async function startRec() {
       $("mic").textContent = "🎤"; $("mic").classList.remove("rec"); $("micx").hidden = true;
       if (recCancel || !chunks.length) return;
       try { await sendMedia({ audio: await toDataUrl(new Blob(chunks, { type: (rec.mimeType || "audio/webm").split(";")[0] })) }, "🎤 رسالة صوتية"); }
-      catch (e) { toast("ما نجمناش نبعثو الصوت"); }
+      catch (e) { toast("خطأ في إرسال الصوت"); }
     };
     rec.start(); recT = 0; $("micx").hidden = false; $("mic").classList.add("rec"); $("mic").textContent = "⏹ 0:00";
     recTimer = setInterval(() => { recT++; $("mic").textContent = "⏹ " + fmt(recT); if (recT >= 60) rec.stop(); }, 1000);
-  } catch (e) { toast("ما نجمناش نستعملو الميكروفون، تأكد من الإذن"); }
+  } catch (e) { toast("تعذر استخدام الميكروفون"); }
 }
 $("mic").onclick = () => (rec && rec.state === "recording") ? rec.stop() : startRec();
 $("micx").onclick = () => { recCancel = true; rec.stop(); };
 
-/* ---------- قفل المحادثة (رمز 4 أرقام) ---------- */
+/* ---------- قفل المحادثة برمز ---------- */
 const lockKey = c => "lock:" + me.uid + ":" + c;
 const hasLock = c => !!localStorage.getItem(lockKey(c));
 const sha = async t => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t))), b => b.toString(16).padStart(2, "0")).join("");
@@ -534,8 +769,7 @@ function showLock(mode) {
 $("lockbtn").onclick = () => showLock(hasLock(current) ? "remove" : "set1");
 $("lockCancel").onclick = () => { $("lock").hidden = true; };
 $("lockForgot").onclick = async () => {
-  Object.keys(localStorage).filter(k => k.startsWith("lock:" + me.uid + ":")).forEach(k => localStorage.removeItem(k));
-  unlocked.clear(); await signOut(auth);
+  localStorage.clear(); unlocked.clear(); await signOut(auth);
 };
 $("pin").oninput = async () => {
   const v = $("pin").value.replace(/\D/g, "").slice(0, 4); $("pin").value = v;
@@ -556,9 +790,6 @@ $("pin").oninput = async () => {
     unlocked.add(current); $("lock").hidden = true; toast("تم تفعيل القفل 🔒");
   } else { lockMode = "set1"; firstPin = ""; $("lockTitle").textContent = LOCK_T.set1; err("الرمزين ما تطابقوش"); }
 };
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden && current && $("chat").classList.contains("on")) { unlocked.clear(); if (hasLock(current)) showLock("enter"); }
-});
 </script>
 </body>
 </html>
