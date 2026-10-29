@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
+<title>Far8 9lbk</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* إخفاء شارة Netlify */
+.netlify-badge, a[href*="netlify"] { display: none !important; }
+
+:root{--bg:#eef3f1;--card:#fff;--ink:#12322c;--mute:#5d7a73;--acc:#1f7a66;--line:#d3e0dc;--err:#b3261e}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden}
+body{font-family:Tajawal,system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;user-select:none;-webkit-user-select:none}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;max-width:520px;margin:0 auto;padding:20px;background:var(--bg)}
+.screen.on{display:flex}
+h1{font-size:28px;margin:8px 0 4px}
+h2{font-size:18px;margin:22px 0 8px}
+p.sub{color:var(--mute);margin:0 0 18px}
+input{width:100%;padding:13px;border:1px solid var(--line);border-radius:10px;font:inherit;background:var(--card);color:var(--ink);margin-bottom:10px;user-select:text;-webkit-user-select:text}
+input:focus,button:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+button{font:inherit;border:0;border-radius:10px;padding:13px 16px;background:var(--acc);color:#fff;cursor:pointer;font-weight:700}
+button.ghost{background:transparent;color:var(--acc);padding:8px}
+button.full{width:100%}
+.err{color:var(--err);min-height:22px;margin:4px 0}
+.row{display:flex;gap:8px}
+.row input{margin:0}
+.top{display:flex;justify-content:space-between;align-items:center;flex:none}
+.group{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:right;background:var(--card);color:var(--ink);border:1px solid var(--line);margin-bottom:8px;font-weight:400}
+.group b{font-weight:700}
+.group span{color:var(--mute);direction:ltr;letter-spacing:2px;font-size:14px}
+.empty{color:var(--mute)}
+.hint{min-height:22px;margin:0 0 8px;font-size:14px;color:var(--mute)}.hint.ok{color:var(--acc)}.hint.bad{color:var(--err)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}.chip{background:var(--card);color:var(--acc);border:1px solid var(--acc);direction:ltr;padding:8px 12px}
+
+#msgs{flex:1 1 0%;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:12px;background:linear-gradient(rgba(238,243,241,.4),rgba(238,243,241,.4)),url(bg.jpg) center/cover var(--bg);min-height:0}
+.m{max-width:80%;padding:8px 12px;border-radius:14px;background:var(--card);border:1px solid var(--line);word-break:break-word;position:relative;transition:transform .15s ease-out;touch-action:pan-y}
+.m small{display:block;color:var(--mute);font-size:12px}
+.m.me{align-self:flex-start;background:var(--acc);color:#fff;border-color:var(--acc)}
+.m.me small{display:none}
+.m:not(.me){align-self:flex-end}
+
+#send{display:flex;gap:8px;padding-bottom:env(safe-area-inset-bottom);flex:none}
+#send input{margin:0}
+[hidden]{display:none!important}
+.m{cursor:pointer}.m .q{background:rgba(0,0,0,.08);border-right:3px solid var(--acc);padding:2px 8px;border-radius:6px;font-size:13px;margin-bottom:3px}
+.m .del{opacity:.6}.m .rx{margin-top:4px;font-size:13px}
+.dots{font-size:24px;padding:4px 10px}
+#menu{position:absolute;top:60px;left:20px;right:20px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;z-index:5;box-shadow:0 8px 24px rgba(0,0,0,.15);max-height:65%;overflow:auto}
+.mt{font-weight:700;margin-bottom:8px}
+.hero{height:150px;border-radius:18px;margin:10px 0;display:flex;flex-direction:column;justify-content:flex-end;padding:14px;color:#fff;background:linear-gradient(transparent 30%,rgba(10,30,26,.85)),url(bg.jpg) center 25%/cover var(--acc)}
+.hero b{font-size:22px}
+.chead{gap:8px;justify-content:flex-start}
+.av{width:38px;height:38px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+.ct{flex:1;min-width:0;display:flex;flex-direction:column}
+.ct small{color:var(--mute);direction:ltr;text-align:right;letter-spacing:2px;font-size:12px}
+.ic{font-size:20px;padding:6px}
+#pinned{background:var(--card);border:1px solid var(--acc);border-radius:10px;padding:6px 10px;margin-top:6px;font-size:14px;flex:none}
+#replybar{display:flex;justify-content:space-between;align-items:center;background:var(--card);border-right:3px solid var(--acc);padding:4px 10px;margin:6px 0;font-size:14px;flex:none}
+
+/* بوب أب الإيموجيات العائم فقط بجانب الرسالة */
+#sheet{position:absolute;inset:0;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;z-index:8;padding:20px}
+.sh{background:var(--card);width:100%;max-width:280px;border-radius:24px;padding:12px 16px;display:flex;justify-content:space-between;box-shadow:0 10px 30px rgba(0,0,0,0.25)}
+.em{font-size:28px;padding:4px;border-radius:50%;cursor:pointer;transition:transform .1s}
+.em:active{transform:scale(1.3)}
+.em.sel{background:var(--line)}
+
+#lock{position:absolute;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:10}
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:20px;z-index:20}
+.media{display:block;max-width:100%;border-radius:10px;margin-top:4px}img.media{max-height:260px}video.media{max-height:300px}audio.media{width:210px}
+button.rec{background:var(--err);color:#fff}
+#dev{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:20px;z-index:30}
+.devc{background:var(--card);border-radius:18px;padding:20px;max-width:420px;display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;line-height:1.8}
+</style>
+</head>
+<body>
+
+<div id="auth" class="screen">
+  <h1>أهلاً بيك</h1>
+  <p class="sub">ادخل بيوزرك وكلمة السر.</p>
+  <input id="u" placeholder="اليوزر" autocapitalize="none" autocomplete="username" style="direction:ltr">
+  <input id="p" type="password" placeholder="كلمة السر" autocomplete="current-password">
+  <div class="err" id="authErr"></div>
+  <button class="full" id="login">دخول</button>
+  <button class="ghost full" id="toReg">ما عندكش حساب؟ اعمل واحد</button>
+</div>
+
+<div id="reg" class="screen">
+  <h1>حساب جديد</h1>
+  <p class="sub">اختار يوزر خاص بيك، صحابك يعرفوك بيه.</p>
+  <input id="ru" placeholder="اليوزر (حروف إنجليزية وأرقام)" autocapitalize="none" autocomplete="off" style="direction:ltr">
+  <div class="hint" id="hint"></div>
+  <div class="chips" id="chips"></div>
+  <input id="rp" type="password" placeholder="كلمة السر (6 أحرف على الأقل)" autocomplete="new-password">
+  <div class="err" id="regErr"></div>
+  <button class="full" id="doReg">إنشاء الحساب</button>
+  <button class="ghost full" id="toLogin">عندي حساب</button>
+</div>
+
+<div id="home" class="screen">
+  <div class="top"><h1 id="hello"></h1><button class="ghost dots" id="dots" aria-label="القائمة">⋮</button></div>
+  <div id="menu" hidden><div class="mt">مجموعاتي</div><div id="groups"></div><button class="ghost full" id="devb">👨‍💻 رسالة من المطوّر</button><button class="ghost full" id="logout">خروج</button></div>
+  <div class="hero"><b>حكي بين صحابك</b><span>بلا هرج، بلا ضجيج</span></div>
+  
+  <h2>محادثة خاصة (راس براس) 👤</h2>
+  <div class="row"><input id="dmUser" placeholder="يوزر الشخص" autocapitalize="none" style="direction:ltr"><button id="startDm">مراسلة</button></div>
+
+  <h2>مجموعة جديدة</h2>
+  <div class="row"><input id="gname" placeholder="اسم المجموعة"><button id="create">إنشاء</button></div>
+
+  <h2>ادخل بكود</h2>
+  <div class="row"><input id="gcode" placeholder="الكود" autocapitalize="characters" style="direction:ltr"><button id="join">دخول</button></div>
+  
+  <div class="err" id="homeErr"></div>
+</div>
+
+<div id="chat" class="screen">
+  <div class="top chead">
+    <button class="ghost ic" id="back">→</button>
+    <div class="av" id="cav"></div>
+    <div class="ct"><b id="ctitle"></b><small id="ccode"></small></div>
+    <button class="ghost ic" id="callv" aria-label="مكالمة صوتية">📞</button>
+    <button class="ghost ic" id="callvid" aria-label="مكالمة فيديو">🎥</button>
+    <button class="ghost ic" id="lockbtn" aria-label="قفل">🔒</button>
+  </div>
+  <div id="pinned" hidden></div>
+  <div id="msgs"></div>
+  <div id="replybar" hidden><span id="replytxt"></span><button class="ghost" id="replyx">✕</button></div>
+  <form id="send">
+    <button type="button" class="ghost ic" id="attach" aria-label="صورة أو فيديو">📎</button>
+    <input id="text" placeholder="اكتب رسالة..." autocomplete="off">
+    <button type="button" class="ghost ic" id="micx" hidden aria-label="إلغاء">✕</button>
+    <button type="button" class="ghost ic" id="mic" aria-label="رسالة صوتية">🎤</button>
+    <button>إرسال</button>
+  </form>
+  <input type="file" id="file" accept="image/*,video/*" hidden>
+  
+  <!-- بوب أب الإيموجيات فقط -->
+  <div id="sheet" hidden><div class="sh" id="emojis"></div></div>
+
+  <div id="lock" hidden>
+    <div style="font-size:42px">🔒</div><b id="lockTitle"></b>
+    <input id="pin" type="password" inputmode="numeric" maxlength="4" autocomplete="off" style="text-align:center;letter-spacing:12px;width:160px;font-size:24px">
+    <div class="err" id="lockErr"></div>
+    <button class="ghost" id="lockCancel">إلغاء</button>
+    <button class="ghost" id="lockForgot">نسيت الرمز؟ (خروج)</button>
+  </div>
+</div>
+<div id="dev" hidden><div class="devc">
+  <div class="av" style="background:var(--acc)">ع</div><b>رسالة من المطوّر 👨‍💻</b>
+  <p>السلام عليكم، أنا عمر، صانع هذا التطبيق رفقة مساعدي الأول 😉<br>المهم، نحب نعطي تحية ليكم أنتم، أيه أنتم: أنس ×2 وياسين. دايماً تجربو في تطبيقاتي حتى وهي ساعات ما تستحقش أصلاً، لكن أنتم دايماً تعطوني الوجه الباهي منها، فنحييكم ونشكركم.</p>
+  <button class="full" id="devx">تمام 🤍</button>
+</div></div>
+<div id="toast" hidden></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, collection, query, where, orderBy, onSnapshot, addDoc, serverTimestamp, deleteField, limit } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyDmU__XZ6X_ksnVbKs7rKvDX5ZPQVruFeU",
+  authDomain: "far8-9lbk.firebaseapp.com",
+  projectId: "far8-9lbk",
+  storageBucket: "far8-9lbk.firebasestorage.app",
+  messagingSenderId: "696710482414",
+  appId: "1:696710482414:web:5eb8b22af79ed1334766ff"
+});
+const auth = getAuth(app), db = getFirestore(app);
+const $ = id => document.getElementById(id);
+const DOMAIN = "@far8.app";
+let me = null, unsubGroups = null, unsubMsgs = null, unsubGroup = null;
+
+const show = id => { document.querySelectorAll(".screen").forEach(s => s.classList.toggle("on", s.id === id)); };
+const myName = () => me.email.split("@")[0];
+
+/* ---------- الحساب ---------- */
+const validName = u => /^[a-z0-9_]{3,20}$/.test(u);
+const authMsg = e => ({
+  "auth/email-already-in-use": "اليوزر هذا مستعمل",
+  "auth/invalid-credential": "اليوزر ولا كلمة السر غالطة",
+  "auth/weak-password": "كلمة السر ضعيفة"
+}[e.code] || "صار خطأ، عاود المحاولة");
+const isFree = async u => !(await getDoc(doc(db, "usernames", u))).exists();
+const typed = () => $("ru").value.trim().toLowerCase();
+
+$("toReg").onclick = () => show("reg");
+$("toLogin").onclick = () => show("auth");
+
+$("login").onclick = async () => {
+  const u = $("u").value.trim().toLowerCase(), p = $("p").value;
+  if (!validName(u) || !p) { $("authErr").textContent = "اكتب اليوزر وكلمة السر"; return; }
+  try { await signInWithEmailAndPassword(auth, u + DOMAIN, p); $("authErr").textContent = ""; }
+  catch (e) { $("authErr").textContent = authMsg(e); }
+};
+
+/* اختيار اليوزر: تحقق مباشر + اقتراحات */
+const setHint = (cls, txt) => { $("hint").className = "hint " + cls; $("hint").textContent = txt; };
+let checkTimer;
+$("ru").oninput = () => {
+  clearTimeout(checkTimer);
+  $("chips").innerHTML = "";
+  const u = typed();
+  if (!u) return setHint("", "");
+  if (!validName(u)) return setHint("bad", "3 إلى 20 حرف إنجليزي أو رقم أو _");
+  setHint("", "نتأكدو...");
+  checkTimer = setTimeout(() => checkName(u), 500);
+};
+async function checkName(u) {
+  try {
+    const free = await isFree(u);
+    if (typed() !== u) return;
+    if (free) setHint("ok", "✓ اليوزر متاح");
+    else { setHint("bad", "اليوزر مستعمل. بدّلو ولا اختار من المقترحات:"); await suggest(u); }
+  } catch (e) { setHint("bad", "ما نجمناش نتأكدو، جرب مرة أخرى"); }
+}
+async function suggest(u) {
+  const base = u.slice(0, 16), r = n => Math.floor(Math.random() * n);
+  const cands = [...new Set([base + r(100), base + "_" + (r(90) + 10), base + (r(900) + 100), "the_" + base, base + "_x" + r(10), base + r(10) + r(10)])].filter(validName);
+  const free = (await Promise.all(cands.map(async c => (await isFree(c)) ? c : null))).filter(Boolean).slice(0, 3);
+  if (typed() !== u) return;
+  const box = $("chips"); box.innerHTML = "";
+  free.forEach(c => {
+    const b = document.createElement("button");
+    b.className = "chip"; b.textContent = c;
+    b.onclick = () => { $("ru").value = c; box.innerHTML = ""; setHint("ok", "✓ اليوزر متاح"); };
+    box.appendChild(b);
+  });
+}
+
+$("doReg").onclick = async () => {
+  const u = typed(), p = $("rp").value;
+  if (!validName(u)) { $("regErr").textContent = "اليوزر غير صالح"; return; }
+  if (p.length < 6) { $("regErr").textContent = "كلمة السر قصيرة (6 أحرف على الأقل)"; return; }
+  $("regErr").textContent = "";
+  try {
+    if (!(await isFree(u))) { setHint("bad", "اليوزر مستعمل. بدّلو ولا اختار من المقترحات:"); await suggest(u); return; }
+    await createUserWithEmailAndPassword(auth, u + DOMAIN, p);
+  } catch (e) {
+    if (e.code === "auth/email-already-in-use") { setHint("bad", "اليوزر مستعمل. بدّلو ولا اختار من المقترحات:"); await suggest(u); }
+    else $("regErr").textContent = authMsg(e);
+  }
+};
+$("logout").onclick = () => signOut(auth);
+
+onAuthStateChanged(auth, user => {
+  me = user;
+  if (unsubGroups) unsubGroups();
+  stopChat();
+  if (!user) return show("auth");
+  $("hello").textContent = "أهلاً " + myName();
+  (async () => { try { const r = doc(db, "usernames", myName()); if (!(await getDoc(r)).exists()) await setDoc(r, { uid: user.uid }); } catch (e) {} })();
+  listGroups();
+  show("home");
+  if (!localStorage.getItem("devseen")) { $("dev").hidden = false; localStorage.setItem("devseen", "1"); }
+});
+
+/* ---------- المحادثة الخاصة (DM - راس براس) ---------- */
+$("startDm").onclick = async () => {
+  const targetUser = $("dmUser").value.trim().toLowerCase();
+  if (!targetUser) { $("homeErr").textContent = "اكتب يوزر الشخص"; return; }
+  if (targetUser === myName()) { $("homeErr").textContent = "ما نجمش تراسل روحك!"; return; }
+  
+  try {
+    const userDoc = await getDoc(doc(db, "usernames", targetUser));
+    if (!userDoc.exists()) { $("homeErr").textContent = "اليوزر هذا مش موجود"; return; }
+    
+    const targetUid = userDoc.data().uid;
+    // عمل معرف فريد للمحادثة بين الشخصين (مرتب ألبدياً باش يمنع التكرار)
+    const dmId = [me.uid, targetUid].sort().join("_DM_");
+    
+    const dmRef = doc(db, "groups", dmId);
+    const dmSnap = await getDoc(dmRef);
+    if (!dmSnap.exists()) {
+      await setDoc(dmRef, {
+        name: "@" + targetUser,
+        isDM: true,
+        members: [me.uid, targetUid],
+        createdAt: serverTimestamp()
+      });
+    }
+    
+    $("dmUser").value = ""; $("homeErr").textContent = "";
+    openChat(dmId, "@" + targetUser);
+  } catch (e) {
+    $("homeErr").textContent = "صار خطأ في فتح المحادثة الخاصة";
+  }
+};
+
+/* ---------- المجموعات ---------- */
+const ALPHA = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const genCode = () => Array.from(crypto.getRandomValues(new Uint8Array(6)), x => ALPHA[x % ALPHA.length]).join("");
+
+$("create").onclick = async () => {
+  const name = $("gname").value.trim();
+  if (!name) { $("homeErr").textContent = "اكتب اسم المجموعة"; return; }
+  try {
+    let code;
+    do { code = genCode(); } while ((await getDoc(doc(db, "groups", code))).exists());
+    await setDoc(doc(db, "groups", code), { name, admin: me.uid, adminName: myName(), members: [me.uid], createdAt: serverTimestamp() });
+    $("gname").value = ""; $("homeErr").textContent = "";
+    openChat(code, name);
+  } catch (e) { $("homeErr").textContent = "ما نجمناش نعملو المجموعة"; }
+};
+
+$("join").onclick = async () => {
+  const code = $("gcode").value.trim().toUpperCase();
+  if (!code) return;
+  try {
+    const ref = doc(db, "groups", code), snap = await getDoc(ref);
+    if (!snap.exists()) { $("homeErr").textContent = "الكود هذا ما فماش"; return; }
+    await updateDoc(ref, { members: arrayUnion(me.uid) });
+    $("gcode").value = ""; $("homeErr").textContent = "";
+    openChat(code, snap.data().name);
+  } catch (e) { $("homeErr").textContent = "ما نجمناش ندخلو المجموعة"; }
+};
+
+function listGroups() {
+  unsubGroups = onSnapshot(query(collection(db, "groups"), where("members", "array-contains", me.uid)), snap => {
+    const box = $("groups"); box.innerHTML = "";
+    if (snap.empty) { box.innerHTML = '<div class="empty">ما عندكش محادثات بعد.</div>'; return; }
+    snap.forEach(d => {
+      const data = d.data();
+      const b = document.createElement("button");
+      b.className = "group";
+      const displayName = data.isDM ? data.name : data.name;
+      const n = document.createElement("b"); n.textContent = displayName;
+      const c = document.createElement("span"); c.textContent = data.isDM ? "خاص" : d.id;
+      b.append(n, c);
+      b.onclick = () => { $("menu").hidden = true; openChat(d.id, displayName); };
+      box.appendChild(b);
+    });
+  });
+}
+
+/* ---------- الدردشة ---------- */
+let current = null, group = {}, replyTo = null, sheetMsg = null;
+const unlocked = new Set();
+const EMOJIS = ["👍", "❤️", "😂", "😮", "😢", "🙏"];
+const isAdmin = () => group.admin === me.uid;
+const toast = t => { const e = $("toast"); e.textContent = t; e.hidden = false; setTimeout(() => e.hidden = true, 2200); };
+function stopChat() { if (unsubMsgs) unsubMsgs(); if (unsubGroup) unsubGroup(); unsubMsgs = unsubGroup = null; }
+$("dots").onclick = () => { $("menu").hidden = !$("menu").hidden; };
+$("callv").onclick = $("callvid").onclick = () => toast("المكالمات جاية في تحديث لاحق");
+
+function openChat(code, name) {
+  stopChat();
+  current = code; group = {}; replyTo = null;
+  $("replybar").hidden = true; $("sheet").hidden = true; $("pinned").hidden = true; $("msgs").innerHTML = "";
+  $("ctitle").textContent = name; $("ccode").textContent = code.includes("_DM_") ? "محادثة خاصة" : code;
+  const av = $("cav"); av.textContent = name.replace("@","").trim()[0] || "؟";
+  av.style.background = "hsl(" + ([...name].reduce((x, c) => x + c.charCodeAt(0), 0) % 360) + ",45%,38%)";
+  if (hasLock(code) && !unlocked.has(code)) showLock("enter"); else $("lock").hidden = true;
+  show("chat");
+  unsubGroup = onSnapshot(doc(db, "groups", code), d => {
+    group = d.data() || {}; const p = group.pinned;
+    $("pinned").hidden = !p; if (p) $("pinned").textContent = "📌 " + p.name + ": " + p.text;
+  });
+  unsubMsgs = onSnapshot(query(collection(db, "groups", code, "messages"), orderBy("ts", "desc"), limit(60)), snap => {
+    const box = $("msgs"); box.innerHTML = "";
+    snap.docs.slice().reverse().forEach(d => box.appendChild(bubble(d.id, d.data())));
+    box.scrollTop = box.scrollHeight;
+  });
+}
+
+function bubble(id, m) {
+  const el = document.createElement("div");
+  el.className = "m" + (m.uid === me.uid ? " me" : "");
+  const add = (tag, cls, txt) => { const x = document.createElement(tag); if (cls) x.className = cls; x.textContent = txt; el.appendChild(x); };
+  add("small", "", m.name);
+  if (m.deleted) { add("i", "del", "🚫 تم حذف هذه الرسالة"); return el; }
+  if (m.replyTo) add("div", "q", m.replyTo.name + ": " + m.replyTo.text);
+  if (m.image || m.video || m.audio) {
+    const t = document.createElement(m.image ? "img" : m.video ? "video" : "audio");
+    t.src = m.image || m.video || m.audio; t.className = "media";
+    if (m.image) t.loading = "lazy";
+    else { t.controls = true; t.preload = "none"; if (m.video) t.playsInline = true; t.onclick = ev => ev.stopPropagation(); }
+    el.appendChild(t);
+  } else add("span", "", m.text);
+  const cnt = {}; Object.values(m.reactions || {}).forEach(e => cnt[e] = (cnt[e] || 0) + 1);
+  const r = Object.entries(cnt).map(([e, n]) => e + (n > 1 ? n : "")).join(" ");
+  if (r) add("div", "rx", r);
+
+  /* إيماءات اللمس الذكية (Long Press + Swipe + Double Tap) */
+  let pressTimer = null, startX = 0, currentX = 0, isSwiping = false, lastTap = 0;
+
+  el.ontouchstart = e => {
+    startX = e.touches[0].clientX;
+    isSwiping = false;
+    pressTimer = setTimeout(() => {
+      if (!isSwiping) openSheet(id, m);
+    }, 500);
+  };
+
+  el.ontouchmove = e => {
+    currentX = e.touches[0].clientX;
+    const diffX = currentX - startX;
+    if (Math.abs(diffX) > 10) {
+      clearTimeout(pressTimer);
+      if (diffX > 0 && diffX < 80) {
+        isSwiping = true;
+        el.style.transform = `translateX(${diffX}px)`;
+      }
+    }
+  };
+
+  el.ontouchend = e => {
+    clearTimeout(pressTimer);
+    if (isSwiping && (currentX - startX) > 50) {
+      replyTo = { name: m.name, text: (m.text || "ملف ميديا").slice(0, 80) };
+      $("replytxt").textContent = "رد على " + replyTo.name + ": " + replyTo.text;
+      $("replybar").hidden = false; $("text").focus();
+    }
+    el.style.transform = "translateX(0px)";
+    
+    const now = Date.now();
+    if (!isSwiping && (now - lastTap) < 300) {
+      sheetMsg = { id, m };
+      react("❤️");
+    }
+    lastTap = now;
+  };
+
+  return el;
+}
+
+/* ---------- إظهار شريط الإيموجيات فقط عند الضغط المطول ---------- */
+function openSheet(id, m) {
+  sheetMsg = { id, m };
+  const mine = (m.reactions || {})[me.uid];
+  const box = $("emojis");
+  box.innerHTML = "";
+  EMOJIS.forEach(e => {
+    const span = document.createElement("span");
+    span.className = "em" + (mine === e ? " sel" : "");
+    span.textContent = e;
+    span.onclick = () => { $("sheet").hidden = true; react(e); };
+    box.appendChild(span);
+  });
+  $("sheet").hidden = false;
+}
+$("sheet").onclick = e => { if (e.target.id === "sheet") $("sheet").hidden = true; };
+
+const mref = () => doc(db, "groups", current, "messages", sheetMsg.id);
+async function react(e) {
+  const mine = (sheetMsg.m.reactions || {})[me.uid];
+  await updateDoc(mref(), { ["reactions." + me.uid]: mine === e ? deleteField() : e });
+}
+
+$("back").onclick = () => { stopChat(); current = null; show("home"); };
+$("send").onsubmit = async e => {
+  e.preventDefault();
+  const text = $("text").value.trim();
+  if (!text) return;
+  const data = { text, uid: me.uid, name: myName(), ts: serverTimestamp() };
+  if (replyTo) data.replyTo = replyTo;
+  $("text").value = ""; replyTo = null; $("replybar").hidden = true;
+  await addDoc(collection(db, "groups", current, "messages"), data);
+};
+
+/* ---------- رسالة المطوّر ---------- */
+$("devb").onclick = () => { $("menu").hidden = true; $("dev").hidden = false; };
+$("devx").onclick = () => { $("dev").hidden = true; };
+
+/* ---------- صور / فيديو / صوت ---------- */
+const CLOUD_NAME = "", UPLOAD_PRESET = "";
+const MAX_VIDEO = 25 * 1024 * 1024;
+async function sendMedia(extra, label) {
+  const data = { text: label, uid: me.uid, name: myName(), ts: serverTimestamp(), ...extra };
+  if (replyTo) { data.replyTo = replyTo; replyTo = null; $("replybar").hidden = true; }
+  await addDoc(collection(db, "groups", current, "messages"), data);
+}
+const toDataUrl = b => new Promise(r => { const f = new FileReader(); f.onload = () => r(f.result); f.readAsDataURL(b); });
+async function compressImage(file) {
+  const bmp = await createImageBitmap(file), k = Math.min(1, 900 / Math.max(bmp.width, bmp.height));
+  const c = document.createElement("canvas"); c.width = bmp.width * k; c.height = bmp.height * k;
+  c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+  return c.toDataURL("image/jpeg", 0.7);
+}
+$("attach").onclick = () => $("file").click();
+$("file").onchange = async () => {
+  const f = $("file").files[0]; $("file").value = "";
+  if (!f) return;
+  try {
+    if (f.type.startsWith("image/")) { toast("نبعثو الصورة..."); await sendMedia({ image: await compressImage(f) }, "🖼️ صورة"); }
+    else if (f.type.startsWith("video/")) {
+      if (!CLOUD_NAME) return toast("رفع الفيديو ما تفعّلش بعد");
+      if (f.size > MAX_VIDEO) return toast("الفيديو كبير (الحد 25 ميغا)");
+      toast("نرفعو الفيديو...");
+      const fd = new FormData(); fd.append("file", f); fd.append("upload_preset", UPLOAD_PRESET);
+      const j = await (await fetch("https://api.cloudinary.com/v1_1/" + CLOUD_NAME + "/video/upload", { method: "POST", body: fd })).json();
+      if (!j.secure_url) throw 0;
+      await sendMedia({ video: j.secure_url }, "🎬 فيديو");
+    } else toast("نوع الملف ما ينفعش");
+  } catch (e) { toast("ما نجمناش نبعثو الملف"); }
+};
+
+let rec = null, chunks = [], recT = 0, recTimer = null, recCancel = false;
+const fmt = n => Math.floor(n / 60) + ":" + String(n % 60).padStart(2, "0");
+async function startRec() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const mt = ["audio/webm;codecs=opus", "audio/mp4"].find(t => MediaRecorder.isTypeSupported(t));
+    rec = new MediaRecorder(stream, { ...(mt ? { mimeType: mt } : {}), audioBitsPerSecond: 24000 });
+    chunks = []; recCancel = false;
+    rec.ondataavailable = e => chunks.push(e.data);
+    rec.onstop = async () => {
+      stream.getTracks().forEach(t => t.stop()); clearInterval(recTimer);
+      $("mic").textContent = "🎤"; $("mic").classList.remove("rec"); $("micx").hidden = true;
+      if (recCancel || !chunks.length) return;
+      try { await sendMedia({ audio: await toDataUrl(new Blob(chunks, { type: (rec.mimeType || "audio/webm").split(";")[0] })) }, "🎤 رسالة صوتية"); }
+      catch (e) { toast("ما نجمناش نبعثو الصوت"); }
+    };
+    rec.start(); recT = 0; $("micx").hidden = false; $("mic").classList.add("rec"); $("mic").textContent = "⏹ 0:00";
+    recTimer = setInterval(() => { recT++; $("mic").textContent = "⏹ " + fmt(recT); if (recT >= 60) rec.stop(); }, 1000);
+  } catch (e) { toast("ما نجمناش نستعملو الميكروفون، تأكد من الإذن"); }
+}
+$("mic").onclick = () => (rec && rec.state === "recording") ? rec.stop() : startRec();
+$("micx").onclick = () => { recCancel = true; rec.stop(); };
+
+/* ---------- قفل المحادثة (رمز 4 أرقام) ---------- */
+const lockKey = c => "lock:" + me.uid + ":" + c;
+const hasLock = c => !!localStorage.getItem(lockKey(c));
+const sha = async t => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t))), b => b.toString(16).padStart(2, "0")).join("");
+let lockMode = "enter", firstPin = "";
+const LOCK_T = { enter: "اكتب رمز المحادثة", set1: "اختار رمز من 4 أرقام", set2: "أعد كتابة الرمز", remove: "اكتب الرمز لإلغاء القفل" };
+function showLock(mode) {
+  lockMode = mode; firstPin = "";
+  $("pin").value = ""; $("lockErr").textContent = ""; $("lockTitle").textContent = LOCK_T[mode];
+  $("lockCancel").hidden = mode === "enter"; $("lockForgot").hidden = mode !== "enter";
+  $("lock").hidden = false; $("pin").focus();
+}
+$("lockbtn").onclick = () => showLock(hasLock(current) ? "remove" : "set1");
+$("lockCancel").onclick = () => { $("lock").hidden = true; };
+$("lockForgot").onclick = async () => {
+  Object.keys(localStorage).filter(k => k.startsWith("lock:" + me.uid + ":")).forEach(k => localStorage.removeItem(k));
+  unlocked.clear(); await signOut(auth);
+};
+$("pin").oninput = async () => {
+  const v = $("pin").value.replace(/\D/g, "").slice(0, 4); $("pin").value = v;
+  if (v.length < 4) return;
+  const err = t => { $("lockErr").textContent = t; $("pin").value = ""; };
+  if (lockMode === "enter" || lockMode === "remove") {
+    const st = JSON.parse(localStorage.getItem(lockKey(current)) || "null");
+    if (st && await sha(st.s + v) === st.h) {
+      if (lockMode === "remove") { localStorage.removeItem(lockKey(current)); unlocked.delete(current); toast("تم إلغاء القفل"); }
+      else unlocked.add(current);
+      $("lock").hidden = true;
+    } else err("الرمز غالط");
+  } else if (lockMode === "set1") {
+    firstPin = v; lockMode = "set2"; $("pin").value = ""; $("lockTitle").textContent = LOCK_T.set2;
+  } else if (v === firstPin) {
+    const s = crypto.randomUUID();
+    localStorage.setItem(lockKey(current), JSON.stringify({ s, h: await sha(s + v) }));
+    unlocked.add(current); $("lock").hidden = true; toast("تم تفعيل القفل 🔒");
+  } else { lockMode = "set1"; firstPin = ""; $("lockTitle").textContent = LOCK_T.set1; err("الرمزين ما تطابقوش"); }
+};
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden && current && $("chat").classList.contains("on")) { unlocked.clear(); if (hasLock(current)) showLock("enter"); }
+});
+</script>
+</body>
+</html>
